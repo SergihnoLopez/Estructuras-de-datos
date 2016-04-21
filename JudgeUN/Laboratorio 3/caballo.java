@@ -4,14 +4,7 @@ public class Main {
 	public static void main (String[] args) {
 		Scanner s = new Scanner(System.in);
 		
-		int[][] board = new int[64][64];
-		
-		for (int i = 0; i < 64; ++i) {
-			for (int j = 0; j < 64; ++j){
-				board[i][j] = Integer.MAX_VALUE;
-			}
-		}
-		
+		int[][] tablero = new int[64][64];
 		int UR = 17;
 		int UL = 15;
 		int LU = 6;
@@ -21,68 +14,77 @@ public class Main {
 		int RU = 10;
 		int RD = -6;
 		
-		for (int x = 0; x < 64; ++x) {
-			board[x][x] = 0;
-			int xloc = x % 8;
-			int yloc = x / 8;
-			
-			if (x + UR < 64 && xloc + 1 < 8 && yloc + 2 < 8) {
-				board[x][x + UR] = 1;
-			}
-			
-			if (x + UL < 64 && xloc - 1 >= 0 && yloc + 2 < 8) {
-				board[x][x + UL] = 1;
-			}
-			
-			if (x + LU < 64 && xloc - 2 >= 0 && yloc + 1 < 8) {
-				board[x][x + LU] = 1;
-			}
-			
-			if (x + LD >= 0 && xloc - 2 >= 0 && yloc - 1 >= 0) {
-				board[x][x + LD] = 1;
-			}
-			
-			if (x + DL >= 0 && xloc - 1 >= 0 && yloc - 2 >= 0) {
-				board[x][x + DL] = 1;
-			}
-			
-			if (x + DR >= 0 && xloc + 1 < 8 && yloc - 2 >= 0) {
-				board[x][x + DR] = 1;
-			}
-			
-			if (x + RU < 64 && xloc + 2 < 8 && yloc + 1 < 8) {
-				board[x][x + RU] = 1;
-			}
-			
-			if (x + RD >= 0 && xloc + 2 < 8 && yloc - 1 >= 0) {
-				board[x][x + RD] = 1;
+		
+		
+		for (int i = 0; i < 64; ++i) {
+			for (int j = 0; j < 64; ++j){
+				tablero[i][j] = Integer.MAX_VALUE;
 			}
 		}
 		
-		int[][] lookup = floyds(board);
+		
+		
+		for (int casilla = 0; casilla < 64; ++casilla) {
+			tablero[casilla][casilla] = 0;
+			int casillaloc = casilla % 8;
+			int yloc = casilla / 8;
+			
+			if (casilla + UR < 64 && casillaloc + 1 < 8 && yloc + 2 < 8) {
+				tablero[casilla][casilla + UR] = 1;
+			}
+			
+			if (casilla + UL < 64 && casillaloc - 1 >= 0 && yloc + 2 < 8) {
+				tablero[casilla][casilla + UL] = 1;
+			}
+			
+			if (casilla + LU < 64 && casillaloc - 2 >= 0 && yloc + 1 < 8) {
+				tablero[casilla][casilla + LU] = 1;
+			}
+			
+			if (casilla + LD >= 0 && casillaloc - 2 >= 0 && yloc - 1 >= 0) {
+				tablero[casilla][casilla + LD] = 1;
+			}
+			
+			if (casilla + DL >= 0 && casillaloc - 1 >= 0 && yloc - 2 >= 0) {
+				tablero[casilla][casilla + DL] = 1;
+			}
+			
+			if (casilla + DR >= 0 && casillaloc + 1 < 8 && yloc - 2 >= 0) {
+				tablero[casilla][casilla + DR] = 1;
+			}
+			
+			if (casilla + RU < 64 && casillaloc + 2 < 8 && yloc + 1 < 8) {
+				tablero[casilla][casilla + RU] = 1;
+			}
+			
+			if (casilla + RD >= 0 && casillaloc + 2 < 8 && yloc - 1 >= 0) {
+				tablero[casilla][casilla + RD] = 1;
+			}
+		}
+		
+		int[][] buscar = Grises(tablero);
 		
 		while (s.hasNext()) {		
-			String from = s.next();
-			String to = s.next();
+			String desde = s.next();
+			String hasta = s.next();
 			
-			int fx = from.charAt(0) - 'a';
-			int fy = from.charAt(1) - '1';
-			int tx = to.charAt(0) - 'a';
-			int ty = to.charAt(1) - '1';
+			int fx = desde.charAt(0) - 'a';
+			int fy = desde.charAt(1) - '1';
+			int tx = hasta.charAt(0) - 'a';
+			int ty = hasta.charAt(1) - '1';			
+			int inicio = fx + 8 * fy;
+			int fin = tx + 8 * ty;
 			
-			int start = fx + 8 * fy;
-			int finish = tx + 8 * ty;
 			
-			
-			System.out.printf("To get from %s to %s takes %d knight moves.\n", from, to, lookup[start][finish]);
+			System.out.printf("To get from %s to %s takes %d knight moves.\n", desde, hasta, buscar[inicio][fin]);
 		}
 	}
 	
-	public static int[][] floyds(int[][] adjacencyMatrix) {
-		// Used as infinity
+	public static int[][] Grises(int[][] matrixAdyacente) {
+		//UTILIZADO COMO INFINITO
 		final int I = Integer.MAX_VALUE;
 
-		int[][] aMatrix = adjacencyMatrix;
+		int[][] aMatrix = matrixAdyacente;
 		int n = aMatrix.length;
 		for (int k = 0; k < n; ++k) {
 			for (int i = 0; i < n; ++i) {
